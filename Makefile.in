@@ -1,0 +1,29 @@
+CC = @CC@
+LIB = heapage
+OBJS = main.o
+TEST_APP = "test"
+CFLAGS = @CFLAGS@
+MAJOR_VER = @MAJOR_VER@
+MINOR_VER = @MINOR_VER@
+
+LIBNAME = lib$(LIB).so.$(MAJOR_VER).$(MINOR_VER)
+
+$(LIB): $(OBJS)
+	$(CC) -shared $(CFLAGS) -Wall -ldl -Wl,-soname,lib$(LIB).so \
+	-o $(LIBNAME) $(OBJS)
+
+%.o: %.c
+	$(CC) -c $< -o $@ -fPIC -Wall $(CFLAGS)
+
+$(TEST_APP): test.c
+	$(CC) $< -o $@ -g3 -Wall 
+
+test: $(LIB) $(TEST_APP)
+	@LD_PRELOAD="./$(LIBNAME)" ./test
+
+clean:
+	@rm -rfv $(TEST_APP) $(OBJS) $(LIBNAME)
+
+distclean: clean
+	@rm -rfv config.{log,status} Makefile
+

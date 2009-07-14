@@ -1,0 +1,54 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.63])
+AC_INIT()
+
+# Enable GNU extensions (for dlsym)
+AC_USE_SYSTEM_EXTENSIONS
+
+# Checks for programs.
+AC_PROG_CC
+
+# Checks for libraries.
+AC_CHECK_LIB([dl], [dlsym])
+
+# Checks for header files.
+AC_CHECK_HEADERS([stdint.h stdlib.h dlfcn.h features.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_TYPE_SIZE_T
+AC_TYPE_UINT64_T
+
+# Macros
+CFLAGS=""
+MAJOR_VER=0
+MINOR_VER=1
+AC_SUBST(MAJOR_VER)
+AC_SUBST(MINOR_VER)
+
+# Check for RTLD_NEXT (requirement for GNU dlsym externsion
+AC_CHECK_DECLS([RTLD_NEXT],
+               [],
+               [AC_MSG_FAILURE([No RTLD_NEXT available for dlsym()])],
+               [[#include <dlfcn.h>]])
+
+# Enable debugging
+AC_ARG_ENABLE([debug],
+              [AC_HELP_STRING([--enable-debug],
+                              [Enable debugging (default is disabled)])],
+              [CFLAGS="$CFLAGS -g3"],
+              [CFLAGS="$CFLAGS -O3"])
+
+# Enable cycle-counter
+AC_ARG_ENABLE([cycle-counter],
+              [AC_HELP_STRING([--enable-cycle-counter],
+                              [Count cycles required to return an allocation
+                               (default enabled)])],
+              [CFLAGS="$CFLAGS -DENABLE_CYCLE_COUNTER"])
+
+# Checks for library functions.
+AC_FUNC_MALLOC
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

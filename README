@@ -1,0 +1,54 @@
+libsheap
+--------
+Sheap Helps Examine Allocated Pointers
+
+libsheap is a simple shared library to aid runtime heap analysis of an
+application.  This library wraps malloc and free calls.  The allocated data
+returned by the memory allocator is output as well as the amount of CPU cycles
+between calls to the true, underlying malloc implementation.  If glibc's malloc
+is used the actual size, including the header malloc attaches to each returned
+chunk is reported.  The sisze of a rturned chunk is typically more than that of
+what the user requests, as the extra size can help reduce fragmentation. 
+
+
+Notes
+-----
+If glibc's malloc is not used, the behavior is undefined.  libsheap does some
+special memory snooping to determine how much memory glibc's malloc truly
+allocates, thus if glibc's malloc is not used, the reported "true size" is
+undefined.
+
+Special thanks to Google and stackoverflow.com where I learned about wrapping
+routines in the GNU/Linux system.  Much of the wrapping code here was
+paraphrased from Checker's post over at stackoverflow.com Thanks Checkers!
+<http://stackoverflow.com/questions/262439/create-a-wrapper-function-for-malloc-and-free-in-c>
+
+
+Building
+--------
+From the top-level directory of libsheap run:
+    ./configure
+    make
+
+Debugging mode can be enabled when configuring by using the following option:
+    ./configure --enable-debug
+
+The cycle counter, which counts CPU cycles between malloc calls.  This feature
+can be enabled via configure as follows:
+    ./configure --enable-cycle-configure
+
+There is no install target.  You can install this shared library where ever you
+desire.
+
+
+Thanks
+------
+Checkers on stackoverflow.com
+The rest of 757labs (www.757labs.com)
+GNU (www.gnu.org)
+
+
+Contact / Project URL
+---------------------
+mattdavis9@gmail.com
+www.757labs.com/projects/libsheap
