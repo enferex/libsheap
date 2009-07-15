@@ -45,7 +45,7 @@
 #ifdef ENABLE_CYCLE_COUNTER
 #define GET_CYCLES(_cycles) \
 {                                                     \
-    unsigned low, high;                               \
+    uint32_t low, high;                               \
     asm volatile ("rdtsc\n" : "=d"(high), "=a"(low)); \
     _cycles = high;                                   \
     _cycles = (_cycles << 32) | low;                  \
