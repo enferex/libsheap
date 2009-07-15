@@ -41,6 +41,7 @@
 #include <dlfcn.h>
 
 
+/* Cycle counter */
 #ifdef ENABLE_CYCLE_COUNTER
 #define GET_CYCLES(_cycles) \
 {                                                     \
@@ -66,6 +67,7 @@ void *malloc(size_t size)
     st = en = 0;
     real_malloc = dlsym(RTLD_NEXT, "malloc");
 
+    /* Call the underlying malloc routine for memory */
     GET_CYCLES(st);
     addr = real_malloc(size);
     GET_CYCLES(en);
@@ -99,5 +101,6 @@ void free(void *addr)
     printf("[%lu] %p free\n", time(NULL), addr);
     fflush(stdout);
 
+    /* Call the underlying free implementation */
     real_free(addr);
 }

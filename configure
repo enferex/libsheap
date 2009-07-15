@@ -1319,9 +1319,8 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-debug          Enable debugging (default is disabled)
-  --enable-cycle-counter  Count cycles required to return an allocation
-                          (default enabled)
+  --enable-debug          Enable debugging (default "no")
+  --enable-cycle-counter  Enable CPU cycle counter (default "yes")
 
 Some influential environment variables:
   CC          C compiler command
@@ -4753,7 +4752,15 @@ fi
 # Enable cycle-counter
 # Check whether --enable-cycle-counter was given.
 if test "${enable_cycle_counter+set}" = set; then
-  enableval=$enable_cycle_counter; CFLAGS="$CFLAGS -DENABLE_CYCLE_COUNTER"
+  enableval=$enable_cycle_counter; ENABLE_COUNTER="$enableval"
+else
+  ENABLE_COUNTER="yes"
+fi
+
+
+if test "x$ENABLE_COUNTER" = "xyes"
+then
+    CFLAGS="$CFLAGS -DENABLE_CYCLE_COUNTER"
 fi
 
 
