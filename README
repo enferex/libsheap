@@ -34,8 +34,11 @@ From the top-level directory of libsheap run:
 Debugging mode can be enabled when configuring by using the following option:
     ./configure --enable-debug
 
-The cycle counter, which counts CPU cycles between malloc calls.  This feature
-can be enabled via configure as follows (it is enabled by default):
+libsheap also has a CPU cycle counter which counts the cycles it takes between
+calls to the underlying (wrapped) malloc.  This implementation is not terribly
+accurate as interrupts can occur between the start and return of that wrapped
+malloc.  This feature can be enabled via configure as follows (it is enabled by
+default): 
     ./configure --enable-cycle-counter
 
 The cycle counter can also be disabled, which will just report values of '0'
@@ -44,6 +47,21 @@ cycles instead:
 
 There is no install target.  You can install this shared library where ever you
 desire.
+
+
+Usage
+-----
+For the wrapper library to actually analyze data it must be loaded before any
+other libraries the to-be-analyzed binary might have.  To load the library
+first, the 'LD_PRELOAD' environment variable should be set.  To do such from a
+bash shell:
+    export LD_PRELOAD=/path/to/libsheap.X.X.so
+
+It might be more pleasing to set the variable just before loading the binary, as
+loading it to the shell will wrap all mallocs called from binarys that execute
+within that shell.  Wrapping just for the binary can be accomplished as follows
+(in a bash environment):
+    LD_PRELOAD=/path/to/libsheap.X.X.so ./some_binary_to_analyize
 
 
 Thanks
