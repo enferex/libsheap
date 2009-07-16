@@ -9,7 +9,7 @@ MINOR_VER = @MINOR_VER@
 LIBNAME = lib$(LIB).so.$(MAJOR_VER).$(MINOR_VER)
 
 $(LIB): $(OBJS)
-	$(CC) -shared $(CFLAGS) -Wall -ldl -Wl,-soname,lib$(LIB).so \
+	$(CC) -shared $(CFLAGS) -Wall -ldl -Wl,-soname,$(LIBNAME) \
 	-o $(LIBNAME) $(OBJS)
 
 %.o: %.c
